@@ -21,4 +21,4 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push tag to DockerHub
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/basic_auth_server:latest   
+          docker push ${{secrets.DOCKER_USERNAME}}/basic_auth   
