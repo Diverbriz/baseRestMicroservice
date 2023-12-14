@@ -1,0 +1,59 @@
+version: "3"
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+
+  basic_auth_server:
+    restart: always
+    build: basic_auth_server
+    image: basic_auth_server
+    depends_on:
+      - mongo
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MODE=dev
+      - MONGO_URL=mongo
+      - MONGO_PORT=27017
+      - SERVER_URL=0.0.0.0
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=pass
+      - PORT=2020
+
+    ports:
+      - "127.0.0.1:2020:2020"
+
+  woyfit_microservice:
+    restart: always
+    build: ./woyfit_microservice
+    image: woyfit_microservice
+    depends_on:
+      - mongo
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+
+    environment:
+        - PYTHONUNBUFFERED=1
+        - MODE=dev
+        - MONGO_URL=mongo
+        - MONGO_PORT=27017
+        - SERVER_URL=0.0.0.0
+        - ADMIN_USERNAME=admin
+        - ADMIN_PASSWORD=pass
+        - PORT=2023
+
+    ports:
+      - "127.0.0.1:2023:2023"
