@@ -10,10 +10,10 @@ services:
       restart_policy:
         condition: any
 
-  basic_auth_server:
+  basic_auth:
     restart: always
     build: basic_auth_server
-    image: basic_auth_server
+    image: diverbriz/basic_auth
     depends_on:
       - mongo
     deploy:
